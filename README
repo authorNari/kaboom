@@ -1,0 +1,21 @@
+= KABOOM
+
+KABOOM is game style demo tool for Ruby's GC.
+(I will use in rubykaigi 2010)
+
+== TODO
+
+(1) ruby's heap inspector (by ruby's C-exetension)
+(2) graphic for above
+
+== require libs
+(1) ruby1.9
+(2) rubysdl-2.1.1
+
+== run
+
+ruby kaboom
+
+== after
+
+OK, kaboom and kaboom!!!
