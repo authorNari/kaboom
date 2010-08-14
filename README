@@ -5,11 +5,10 @@ KABOOM is game style demo tool for Ruby's GC.
 
 == TODO
 
-(1) ruby's heap inspector (by ruby's C-exetension)
-(2) graphic for above
+(1) burden conditioning for GC.
 
 == require libs
-(1) ruby1.9
+(1) ruby 1.9.2 (But it's not released. I tryed ruby 1.9.2 rc2)
 (2) rubysdl-2.1.1
 
 == run

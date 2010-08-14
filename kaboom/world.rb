@@ -1,7 +1,8 @@
 module Kaboom
   class World
-    attr_reader :w, :h, :horizon
+    attr_reader :w, :h, :horizon, :frame
     attr_writer :screen
+    attr_accessor :per_obj, :visualize, :font
 
     def initialize(w, h, horizon)
       @w = w
@@ -17,6 +18,8 @@ module Kaboom
       @kaboom_start_frame = -1
       @kaboom_stop_frame = -1
       @screen = nil
+      @per_obj = 0
+      @visualize = false
     end
 
     def tick
@@ -30,6 +33,7 @@ module Kaboom
       @objs.compact!
       @screen.fill_rect(0, 0, @w, @horizon, [255, 255, 255])
       @screen.fill_rect(0, @horizon, @w, @h-@horizon, [0, 0, 0])
+      @font.draw_solid_utf8(@screen, "Obj : #{@objs.size}", 2, @horizon+4, 255,255,255)
     end
 
     def event(input)

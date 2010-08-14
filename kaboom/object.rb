@@ -29,6 +29,8 @@ module Kaboom
       @fall_speed = 0
       @kaboom_speed = 600 + rand(2) * 100
       @flyed = false
+      @burden = []
+      WORLD.per_obj.times{|i| @burden << i.to_s }
     end
 
     def live(screen)
@@ -37,6 +39,7 @@ module Kaboom
       stand? ? stand_up : fall
       countup_frame
       screen.put(@img, @x, @y) if @img
+      burden
     end
 
     def check_kaboom(x, y)
@@ -142,6 +145,10 @@ module Kaboom
       @flyed = true
       y_move(@fall_speed)
       @fall_speed += 1 if @fall_speed < 15
+    end
+
+    def burden
+      (WORLD.per_obj / 10).times{|i| i.to_s}
     end
 
     def kaboom
