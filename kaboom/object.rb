@@ -30,7 +30,7 @@ module Kaboom
       @kaboom_speed = 600 + rand(2) * 100
       @flyed = false
       @burden = []
-      WORLD.per_obj.times{|i| @burden << i.to_s }
+      WORLD.burden_obj.times{|i| @burden << i.to_s }
     end
 
     def live(screen)
@@ -148,7 +148,7 @@ module Kaboom
     end
 
     def burden
-      (WORLD.per_obj / 10).times{|i| i.to_s}
+      (WORLD.burden_obj / 50).times{|i| i.to_s}
     end
 
     def kaboom

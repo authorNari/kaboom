@@ -9,6 +9,7 @@ require 'rubygems'
 require 'sdl'
 require_relative 'lib/fpstimer.rb'
 require_relative 'lib/input.rb'
+require_relative 'kaboom/color'
 require_relative 'kaboom/world'
 require_relative 'kaboom/object'
 require_relative 'kaboom/heap_visualizer'
@@ -17,14 +18,19 @@ require 'optparse'
 
 GC::Profiler.enable
 WORLD = Kaboom::World.new(1000, 350, 350 - (350 / 10))
+@init_obj = 0
 
 opts = OptionParser.new
-opts.on("--per-obj N", Integer){|n| WORLD.per_obj = n }
-opts.on("-v", "--visualize"){|value| WORLD.visualize = true }
+opts.on("-b N", "--burden N", "burden level", Integer){|n| WORLD.burden_obj = n }
+opts.on("-v", "--visualize", "show heap visualizer"){ WORLD.visualize = true }
+opts.on("--sec N", "update sec for heap visualizer", Integer){|n| WORLD.visualizing_sec = n}
+opts.on("--rvalue-height N", "object height for heap visualizer", Integer){|n| WORLD.rvalue_height = n }
+opts.on("-o N", "create objects from beginning ", Integer){|n| @init_obj = n }
 opts.parse!(ARGV)
 
 class Input
   define_key SDL::Key::ESCAPE, :exit
+  define_key SDL::Key::G, :gc
 end
 
 def setup_sdl
@@ -37,8 +43,9 @@ end
 
 def kaboom!
   screen = setup_sdl()
-  WORLD.screen = screen
-  WORLD.font = SDL::TTF.open(File.join(File.dirname(__FILE__), 'kaboom/fonts/VeraMoBd.ttf'), 16)
+  WORLD.setup(screen, 
+              SDL::TTF.open(File.join(File.dirname(__FILE__), 'kaboom/fonts/VeraMoBd.ttf'), 16),
+              @init_obj)
 
   input = Input.new
   visualizer = Kaboom::HeapVisualizer.new(screen)
@@ -46,7 +53,7 @@ def kaboom!
   timer.reset
 
   loop {
-    WORLD.build
+    WORLD.render_background
     res = WORLD.event(input)
     if res == :stop
       GC::Profiler.report
