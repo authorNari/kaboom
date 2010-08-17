@@ -2,7 +2,9 @@ module Kaboom
   class World
     attr_reader :w, :h, :horizon, :frame
     attr_writer :screen
-    attr_accessor :burden_obj, :visualize, :font, :visualizing_sec, :rvalue_height, :init_obj
+    attr_accessor :burden_obj, :visualize, :font,
+                  :visualizing_sec, :rvalue_height, :init_obj,
+                  :speed, :smart
 
     def initialize(w, h, horizon)
       @w = w
@@ -22,6 +24,8 @@ module Kaboom
       @visualize = false
       @visualizing_sec = 20
       @rvalue_height = 1
+      @speed = nil
+      @smart = false
     end
 
     def setup(screen, font, init_obj)
@@ -47,17 +51,19 @@ module Kaboom
     def event(input)
       input.poll
       return :stop if input.exit
-      x, y, lbutton, cbutton, rbutton = SDL::Mouse.state
-      create_object(x, y) if rbutton
-      if lbutton
-        @kaboom_start_frame = @frame
-        @kaboom_stop_frame = @frame + 10
-        @kaboom_x = x - 50
-        @kaboom_y = y - 50
-        @objs.each{|o| o.check_kaboom(x, y) }
-      end
-      if input.gc
-        GC.start
+      if (@frame % 5).zero?
+        x, y, lbutton, cbutton, rbutton = SDL::Mouse.state
+        create_object(x, y) if rbutton
+        if lbutton
+          @kaboom_start_frame = @frame
+          @kaboom_stop_frame = @frame + 10
+          @kaboom_x = x - 50
+          @kaboom_y = y - 50
+          @objs.each{|o| o.check_kaboom(x, y) }
+        end
+        if input.gc
+          GC.start
+        end
       end
     end
 

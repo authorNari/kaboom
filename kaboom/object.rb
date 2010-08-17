@@ -23,7 +23,7 @@ module Kaboom
         [im.copy_rect(0, 0, 50, 50), im.copy_rect(50, 0, 50, 50),
          im.copy_rect(100, 0, 50, 50), im.copy_rect(50, 0, 50, 50), 0]
       @animate_left.map{|i| clean_bg(i)  unless i == 0}
-      @speed = (rand(5)+1)
+      @speed = (WORLD.speed ? WORLD.speed : (rand(5)+1))
       @move_methods = [:walk_right, :walk_left]
       @frame = 0
       @fall_speed = 0
@@ -71,12 +71,17 @@ module Kaboom
     end
 
     def decide
-      if (@frame % (50 / @speed)).zero?
+      if smart? && (@frame % (50 / @speed)).zero?
         return @move_method = @move_methods[rand(2)]
       end
       @move_method = :walk_right if @x < 0
       @move_method = :walk_left if (@x+@w) > WORLD.w
+      @move_method ||= :walk_right
       return @move_method
+    end
+
+    def smart?
+      return WORLD.smart
     end
 
     def countup_frame

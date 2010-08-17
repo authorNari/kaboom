@@ -24,6 +24,8 @@ opts = OptionParser.new
 opts.on("-b N", "--burden N", "burden level", Integer){|n| WORLD.burden_obj = n }
 opts.on("-v", "--visualize", "show heap visualizer"){ WORLD.visualize = true }
 opts.on("--sec N", "update sec for heap visualizer", Integer){|n| WORLD.visualizing_sec = n}
+opts.on("--speed N", "speed for objects", Integer){|n| WORLD.speed = n}
+opts.on("--smart", "more smart objects"){ WORLD.smart = true}
 opts.on("--rvalue-height N", "object height for heap visualizer", Integer){|n| WORLD.rvalue_height = n }
 opts.on("-o N", "create objects from beginning ", Integer){|n| @init_obj = n }
 opts.parse!(ARGV)
@@ -57,6 +59,7 @@ def kaboom!
     res = WORLD.event(input)
     if res == :stop
       GC::Profiler.report
+      puts "GC total time : #{GC::Profiler.total_time}"
       break
     end
     WORLD.tick
