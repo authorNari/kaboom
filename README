@@ -1,11 +1,16 @@
 = KABOOM
 
 KABOOM is game style demo tool for Ruby's GC.
-(I will use in rubykaigi 2010)
 
 == require libs
-(1) ruby 1.9.2 (But it's not released. I tryed ruby 1.9.2 rc2)
+(1) ruby 1.9.2 or later
 (2) rubysdl-2.1.1
+
+== install
+
+ $ cd kaboom/ext/
+ $ ruby extconf.rb
+ $ make
 
 == run
 
