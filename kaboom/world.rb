@@ -89,11 +89,13 @@ module Kaboom
     end
 
     def periodic_gc_start
-      if (@frame % 100).zero?
-        @screen.fill_rect(0, 0, @w, @horizon, Color::WHITE)
-        @big_font.draw_solid_utf8(@screen, "GC.start!!", @w/2-150, @horizon/2-20, *Color::BLACK)
-        @screen.update_rect(0, 0, @w, @horizon)
-        GC.start
+      if @periodic_gc
+        if (@frame % 100).zero?
+          @screen.fill_rect(0, 0, @w, @horizon, Color::WHITE)
+          @big_font.draw_solid_utf8(@screen, "GC.start!!", @w/2-150, @horizon/2-20, *Color::BLACK)
+          @screen.update_rect(0, 0, @w, @horizon)
+          GC.start
+        end
       end
     end
   end
