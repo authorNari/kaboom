@@ -7,7 +7,6 @@
 
 require 'rubygems'
 require 'sdl'
-require_relative 'lib/fpstimer.rb'
 require_relative 'lib/input.rb'
 require_relative 'kaboom/color'
 require_relative 'kaboom/world'
@@ -55,8 +54,6 @@ def kaboom!
 
   input = Input.new
   visualizer = Kaboom::HeapVisualizer.new(screen)
-  timer = FPSTimerLight.new
-  timer.reset
 
   loop {
     WORLD.render_background
@@ -68,9 +65,7 @@ def kaboom!
     end
     WORLD.tick
     visualizer.describe_mark_in_heap
-    timer.wait_frame {
-      screen.update_rect(0, visualizer.h, WORLD.w, WORLD.h-visualizer.h)
-    }
+    screen.update_rect(0, visualizer.h, WORLD.w, WORLD.h-visualizer.h)
   }
 end
 
