@@ -28,6 +28,7 @@ opts.on("--speed N", "speed for objects", Integer){|n| WORLD.speed = n}
 opts.on("--smart", "more smart objects"){ WORLD.smart = true}
 opts.on("--rvalue-height N", "object height for heap visualizer", Integer){|n| WORLD.rvalue_height = n }
 opts.on("-o N", "create objects from beginning ", Integer){|n| @init_obj = n }
+opts.on("--periodic-gc", "periodic GC.start"){ WORLD.periodic_gc = true}
 opts.parse!(ARGV)
 
 class Input
@@ -45,8 +46,11 @@ end
 
 def kaboom!
   screen = setup_sdl()
+  font_path = File.join(File.dirname(__FILE__), 'kaboom/fonts/VeraMoBd.ttf')
   WORLD.setup(screen, 
-              SDL::TTF.open(File.join(File.dirname(__FILE__), 'kaboom/fonts/VeraMoBd.ttf'), 16),
+              {:normal => SDL::TTF.open(font_path, 16),
+                :big => SDL::TTF.open(font_path, 50),
+                :small => SDL::TTF.open(font_path, 8)},
               @init_obj)
 
   input = Input.new

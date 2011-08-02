@@ -153,7 +153,9 @@ module Kaboom
     end
 
     def burden
-      (WORLD.burden_obj / 50).times{|i| i.to_s}
+      if not WORLD.periodic_gc
+        (WORLD.burden_obj / 50).times{|i| i.to_s}
+      end
     end
 
     def kaboom

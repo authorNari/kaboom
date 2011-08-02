@@ -2,9 +2,9 @@ module Kaboom
   class World
     attr_reader :w, :h, :horizon, :frame
     attr_writer :screen
-    attr_accessor :burden_obj, :visualize, :font,
+    attr_accessor :burden_obj, :visualize, :font, :big_font, :small_font,
                   :visualizing_sec, :rvalue_height, :init_obj,
-                  :speed, :smart
+                  :speed, :smart, :periodic_gc
 
     def initialize(w, h, horizon)
       @w = w
@@ -26,11 +26,14 @@ module Kaboom
       @rvalue_height = 1
       @speed = nil
       @smart = false
+      @periodic_gc = false
     end
 
-    def setup(screen, font, init_obj)
+    def setup(screen, fonts={}, init_obj=0)
       @screen = screen
-      @font = font
+      @font = fonts[:normal]
+      @big_font = fonts[:big]
+      @small_font = fonts[:small]
       init_obj.times{ create_object(rand(@w), 10) }
     end
 
@@ -38,6 +41,7 @@ module Kaboom
       @frame += 1
       @objs.each{|o| o.live(@screen) }
       kaboom
+      periodic_gc_start
     end
 
     def render_background
@@ -81,6 +85,15 @@ module Kaboom
           index = 0 if index >= (@kaboom_animation.size-1)
           @kaboom_animation[-1] = index
         end
+      end
+    end
+
+    def periodic_gc_start
+      if (@frame % 100).zero?
+        @screen.fill_rect(0, 0, @w, @horizon, Color::WHITE)
+        @big_font.draw_solid_utf8(@screen, "GC.start!!", @w/2-150, @horizon/2-20, *Color::BLACK)
+        @screen.update_rect(0, 0, @w, @horizon)
+        GC.start
       end
     end
   end
